@@ -1,13 +1,22 @@
 ###################################################
 #
-# This script unpacks the ramdisk boot image for editing
-# Typical usage is to quickyl edit init.rc file to adjust 
-# startup behavoir.
+# This script unpacks the ramdisk boot image for 
+# editing.
+#  
+# Typical usage is to execute:
+# 
+# 1. Attach adb to the device
+# 2. execute:
+# 
+# $ ./unpack-init.rc-android.sh
 #
-# Files unpacked here:
+# Which then opens init.rc file into an editor
+# and allows for tweaking of the startup behavoir.
+#
+# Files unpacked are located here for reference:
 # /tmp/initrd/fs/
 #
-# Files are repacked and sent to the device 
+# The files are repacked and sent to the device 
 # after the editor (gedit in this case) is closed. 
 #
 # <chris.ladden@liquidware.com>
