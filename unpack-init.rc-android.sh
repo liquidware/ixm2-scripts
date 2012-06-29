@@ -28,6 +28,7 @@ echo "Setting up directories"
 rm -rf /tmp/initrd
 mkdir /tmp/initrd
 cd /tmp/initrd/
+adb remount
 adb shell mkdir /sdcard/boot
 adb shell mount -t msdos /dev/block/mmcblk0p1 /sdcard/boot
 adb pull /sdcard/boot/uInitrd ./
