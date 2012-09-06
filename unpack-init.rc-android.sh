@@ -38,7 +38,7 @@ function pull() {
 }
 
 function unpack() {
-  echo "Unpacking fs"
+	echo "Unpacking fs"
 	dd bs=1 skip=64 if=./uInitrd of=initrd.gz
 	gunzip initrd.gz
 	cd /tmp/initrd/fs
@@ -71,8 +71,13 @@ function push() {
 	popd
 }
 
+function install() {
+    package=$1
+    file=$2
+}
+
 #Parse arguments
-while getopts ":i:k:" opt; do
+while getopts ":i:k:a:n:" opt; do
 HAVE_ARGS="1"
   case $opt in
     i)
@@ -96,12 +101,34 @@ HAVE_ARGS="1"
         thefile="$OPTARG"
         if [ -f $thefile ]; then
             pull
-            adb push $thefile /boot/uImage
+            adb push $thefile /sdcard/boot/uImage
             adb shell sync
         else
             echo "ERROR: File not found"
             exit 1
         fi
+      ;;
+    a)
+        #Use an application file specified on the command line
+        echo "-a application was triggered, Parameter: $OPTARG" >&2
+        thefile="$OPTARG"
+        if [ -f $thefile ]; then
+            if [ "$appname" != "" ]; then
+                adb uninstall $appname
+                adb install $thefile
+                adb shell sync
+            else
+                echo "ERROR: missing name from -n flag"
+            fi
+        else
+            echo "ERROR: File not found"
+            exit 1
+        fi
+      ;;
+    n)
+        #name of the application ex. com.liquidware.networkedserial.app
+        echo "-n name was triggered, Parameter: $OPTARG" >&2
+        appname="$OPTARG"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
